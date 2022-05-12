@@ -5,8 +5,19 @@
 ### Based on the work of Chawla, S. and A. Gionis (2013). k-means--: A unified approach to clustering and outlier detection. SIAM International Conference on Data Mining (SDM13).
 ### Using 'ordering' described in Howe, D (2013) Clustering and anomaly detection in tropical cyclones.
 
-#' K-Means clustering with simultaneous Outlier Detection
-#' @export
+#' @title K-Means clustering with simultaneous Outlier Detection
+#'
+#' @description An implementation of the 'k-means--' algorithm proposed
+#' by Chawla and Gionis, 2013 in their paper,
+#' "k-means-- : A unified approach to clustering and outlier detection.
+#' SIAM International Conference on Data Mining (SDM13)",
+#' \doi{10.1137/1.9781611972832.21}
+#' and using 'ordering' described by Howe, 2013 in the thesis,
+#' "Clustering and anomaly detection in tropical cyclones".
+#'
+#' Useful for creating (potentially) tighter clusters than
+#' standard k-means and simultaneously finding outliers inexpensively
+#' in multidimensional space.
 #'
 #' @param X matrix of numeric data or an object that can be coerced
 #' to such a matrix (such as a data frame with numeric columns only).
@@ -16,12 +27,12 @@
 #' (default = 100)
 #' @param conv_method character: the method used to assess
 #' if kmod has converged (default = "delta_C")
-#' @param conv_error numeric: the tolerence permissible when
+#' @param conv_error numeric: the tolerance permissible when
 #' assessing convergence (default = 0)
 #' @param allow_empty_c logical: set whether empty clusters are
 #' permissible (default = FALSE)
 #' @return kmod returns a list comprising the following components
-#' @@return \code{k} the number of clusters specified
+#' @return \code{k} the number of clusters specified
 #' @return \code{l} the number of outliers specified
 #' @return \code{C} the set of cluster centroids
 #' @return \code{C_sizes} cluster sizes
@@ -43,7 +54,9 @@
 #'
 #' # cluster a dataset with 8 clusters and 0 outliers
 #' x <- kmod(x, 8)
-#'
+#' @export
+#' @importFrom stats aggregate runif
+#' @importFrom utils head tail
 kmod = function(X, k=5, l=0, i_max=100
                 , conv_method="delta_C", conv_error=0
                 , allow_empty_c=FALSE)
@@ -67,7 +80,7 @@ kmod = function(X, k=5, l=0, i_max=100
   C_current = C_zero(X,k)
   C_prev2 = C_prev = C_current
 
-  #2. initialise interation count
+  #2. initialise iteration count
   i = i_start
 
   #3. while not converged do
@@ -89,10 +102,10 @@ kmod = function(X, k=5, l=0, i_max=100
     Q = Q_reorder(dXC)
 
     #7. Li = l largest dXC
-    QLi = head(Q, n=l)
+    QLi = utils::head(Q, n=l)
 
     #8. get X\Li
-    QXnet = tail(Q, n=length(Q)-l)
+    QXnet = utils::tail(Q, n=length(Q)-l)
 
     #9-12. calculate the new centroids
     #       by averaging the values in Xnet assigned to each Ci-1
@@ -198,7 +211,7 @@ delta_C = function(C1, C2, C3)
 
 get_within_cluster_ss = function(dXC, Q)
 {
-  wcss = aggregate(dXC[Q,1],list(dXC[Q,2]),sum)
+  wcss = stats::aggregate(dXC[Q,1],list(dXC[Q,2]),sum)
   return(wcss[,-1])
 }
 
@@ -274,7 +287,7 @@ get_extra_centroid_index = function(dXC, Q, k)
   # subset of Q that are in Cmax
   Q = subset(Q, dXC[Q,c_index]==Cmax)
 
-  new_ind = head(Q,c_value)
+  new_ind = utils::head(Q,c_value)
   # new_ind = tail(Q,1)
   # new_ind = Q[length(Q)/2]
   return(new_ind)
@@ -314,7 +327,7 @@ C_zero = function(X, k, method = "random", c_type = "clustroid")
          random = {
            switch(c_type,
                   clustroid = {  Cz = X[sample(nrow(X), k), ] },
-                  space = {Cz = apply(X, 2, function(x) runif(k, min = min(x), max = max(x)))},
+                  space = {Cz = apply(X, 2, function(x) stats::runif(k, min = min(x), max = max(x)))},
                   Cz = X[sample(nrow(X), k),]
            )
          },

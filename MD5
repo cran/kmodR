@@ -1,7 +1,9 @@
-3273d4cf1df4f4e3aa8c42e394b2e2aa *DESCRIPTION
-efde0ef22d7f414931f8216cc60b24e4 *NAMESPACE
-b15373b5a680242a5c04cccf7adf137e *R/kmod.R
-8387d421ec83160d64dcd6a87651e5f8 *README.md
-2befd8fbd99ff879c25ee15a82af9bfd *man/kmod.Rd
-c74c04a2e7f41c0e36b826b17ae7fdf3 *tests/testthat.R
+2dfdb541aedda733395a6b043b9f7ac4 *DESCRIPTION
+2f2c8e97691249e19dcf50c4fed4d8e9 *NAMESPACE
+676d5c83798c5e741cb5094acbd197c3 *NEWS.md
+8acafa0663f3b7c214020c312c60858a *R/kmod.R
+fa0f1018fb57cfb8af6aae835916f5d6 *README.md
+01ea0854bede4e135821000371b2a65e *build/partial.rdb
+dd2388d7d610875308555b77e5933e3b *man/kmod.Rd
+c6c127150b81a41a09c01b307fefc0cb *tests/testthat.R
 b5768e9da8f76a4e65f9bddf67db00d9 *tests/testthat/test_kmodR.R
